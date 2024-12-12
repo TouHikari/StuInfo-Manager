@@ -1,59 +1,62 @@
 #include "welcome.h"
+#include "account.c"
 
-int language;
+char language[5];
 extern const char VERSION[];
 
-void welcome_core(void)
+void welcomeCore(void)
 {
-    program_info();
+    programInfo();
+    accountCore();
 }
 
-void program_info(void)
+void programInfo(void)
 {
+    int lang;
     char input;
 
-    reset:
-    printf("请选择语言|Please choose the language\n");
-    printf("1 - 简体中文|");
+    resetLang:
+    printf("请选择语言|Please choose the language:\n");
+    printf("1 - 简体中文\t");
     printf("2 - English\n");
+    printf(">>> ");
+    scanf("%d", &lang);
 
-    scanf("%d", &language);
-    switch (language)
+    while ((input = getchar()) != '\n')
+        continue;
+
+    switch (lang)
     {
     case 1:
+        strcpy(language, "chs");
         welcome_chs();
         break;
     case 2:
+        strcpy(language, "eng");
         welcome_eng();
         break;
-    
     default:
-        printf("\033[;31m输入不合法！|Invalid input!\n\033[0m");
-        while ((input = getchar()) != '\n')
-            continue;
-        goto reset;
+        printf("\033[;31m非法输入！|Invalid input!\n\033[0m");
+        goto resetLang;
     }
-    
-    while ((input = getchar()) != '\n')
-        continue;
 }
 
 void welcome_chs(void)
 {
     printf("*******************************************************\n");
-    printf("\t\t信息管理系统 %s\n", VERSION);
+    printf("                信息管理系统 %s\n", VERSION);
     printf("\n");
-    printf("\t\t  作者：TouHikari\n");
-    printf("\tGithub主页：https://github.com/TouHikari\n");
+    printf("                  作者：TouHikari\n");
+    printf("       Github主页：https://github.com/TouHikari\n");
     printf("*******************************************************\n");
 }
 
 void welcome_eng(void)
 {
     printf("*******************************************************\n");
-    printf("\tInformation Management System %s\n", VERSION);
+    printf("        Information Management System %s\n", VERSION);
     printf("\n");
-    printf("\t\t  Author: TouHikari\n");
-    printf("\tGithub: https://github.com/TouHikari\n");
+    printf("                 Author: TouHikari\n");
+    printf("        Github: https://github.com/TouHikari\n");
     printf("*******************************************************\n");
 }

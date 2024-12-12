@@ -1,3 +1,3 @@
 #include <stdio.h>
 
-void students_core(void);
+void studentsCore(void);
