@@ -1,4 +1,5 @@
-#include "welcome.h"
+#include "..\include\headfiles.h"
+#include "..\include\welcome.h"
 
 char language[5];
 extern const char VERSION[];
