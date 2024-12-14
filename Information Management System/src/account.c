@@ -4,11 +4,19 @@
 
 extern char language[5];
 char identity[10];
+bool ifExit = false;
 
 void accountCore(void)
 {
-    chooseIdentity();
-    menu();
+    while (1)
+    {
+        chooseIdentity();
+        if (ifExit)
+        {
+            return;
+        }
+        menu();
+    }
 }
 
 void chooseIdentity(void)
@@ -24,6 +32,7 @@ void chooseIdentity(void)
         printf("2 - \033[;32m职工\t\033[0m");
         printf("3 - \033[;34m学生\t\033[0m");
         printf("4 - \033[;35m访客\n\033[0m");
+        printf("\t\t\t\t\t\tq - \033[;31m退出\n\033[0m");
         printf(">>> ");
         scanf("%c", &mode);
 
@@ -47,6 +56,9 @@ void chooseIdentity(void)
         case '4':
             ifError = false;
             guestLogin();
+            break;
+        case 'q':
+            ifExit = true;
             break;
         default:
             ifError = true;

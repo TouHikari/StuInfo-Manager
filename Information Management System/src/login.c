@@ -88,7 +88,8 @@ void login(void)
 
 void regis(void)
 {
-    USER in, read;
+    USER in = { .password = "" };
+    USER read;
     FILE *fp;
     char passwordTemp[MAX_PASSWORD];
 
@@ -155,7 +156,7 @@ void regis(void)
                 exit(EXIT_FAILURE);
             }
 			fwrite(&in, sizeof(USER), 1, fp);
-			printf("\033[;32m账号注册成功！\033[0m");
+			printf("\033[;32m账号注册成功！\033[0m\n\n");
             break;
 		}
 		else
@@ -199,7 +200,37 @@ void nameFile(void)
     }
 }
 
-void getPassword()
+void getPassword(char pwd[])
 {
+    int i = 0;
+    char ch;
 
+    system("stty -echo");
+
+    while (i < MAX_PASSWORD - 1)
+    {
+        ch = getchar();
+
+        if (ch == '\n')
+        {
+            break;
+        }
+        else if (ch == 127 || ch == '\b')
+        {
+            if (i > 0)
+            {
+                i--;
+                printf("\b \b");
+            }
+        }
+        else
+        {
+            pwd[i++] = ch;
+            printf("*");
+        }
+    }
+    pwd[i] = '\0';
+
+    system("stty echo");
+    printf("\n");
 }

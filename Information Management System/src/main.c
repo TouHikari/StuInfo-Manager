@@ -8,5 +8,6 @@ int main(void)
     welcomeCore();
     accountCore();
 
+    printf("程序正在关闭...");
     return 0;
 }

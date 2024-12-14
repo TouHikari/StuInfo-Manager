@@ -12,3 +12,4 @@ typedef struct User
 void login(void);
 void regis(void);
 void nameFile(void);
+void getPassword(char pwd[]);
