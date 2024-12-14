@@ -1,5 +1,4 @@
 #include "welcome.h"
-#include "account.c"
 
 char language[5];
 extern const char VERSION[];
@@ -7,42 +6,46 @@ extern const char VERSION[];
 void welcomeCore(void)
 {
     programInfo();
-    accountCore();
 }
 
 void programInfo(void)
 {
-    int lang;
+    char lang;
     char input;
+    bool ifError = false;
 
-    resetLang:
-    printf("请选择语言|Please choose the language:\n");
-    printf("1 - 简体中文\t");
-    printf("2 - English\n");
-    printf(">>> ");
-    scanf("%d", &lang);
-
-    while ((input = getchar()) != '\n')
-        continue;
-
-    switch (lang)
+    do
     {
-    case 1:
-        strcpy(language, "chs");
-        welcome_chs();
-        break;
-    case 2:
-        strcpy(language, "eng");
-        welcome_eng();
-        break;
-    default:
-        printf("\033[;31m非法输入！|Invalid input!\n\033[0m");
-        goto resetLang;
-    }
+        printf("请选择语言|Please choose the language:\n");
+        printf("1 - 简体中文\t");
+        printf("2 - English\n");
+        printf(">>> ");
+        scanf("%c", &lang);
+
+        while ((input = getchar()) != '\n')
+            continue;
+
+        switch (lang)
+        {
+        case '1':
+            ifError = false;
+            welcome_chs();
+            break;
+        case '2':
+            ifError = false;
+            welcome_eng();
+            break;
+        default:
+            ifError = true;
+            printf("\033[;31m非法输入！|Invalid input!\n\033[0m");
+            break;
+        }
+    } while (ifError);
 }
 
 void welcome_chs(void)
 {
+    strcpy(language, "chs");
     printf("*******************************************************\n");
     printf("                信息管理系统 %s\n", VERSION);
     printf("\n");
@@ -53,6 +56,7 @@ void welcome_chs(void)
 
 void welcome_eng(void)
 {
+    strcpy(language, "eng");
     printf("*******************************************************\n");
     printf("        Information Management System %s\n", VERSION);
     printf("\n");

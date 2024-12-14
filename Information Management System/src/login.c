@@ -6,30 +6,36 @@ char filename[20];
 void menu(void)
 {
     char input;
-    int action;
+    char action;
+    bool ifError = false;
 
-    resetAction:
+    do
+    {
     printf("请选择操作：\n");
     printf("1 - 登录\t");
     printf("2 - 注册\n");
     printf(">>> ");
-    scanf("%d", &action);
+    scanf("%c", &action);
 
     while ((input = getchar()) != '\n')
         continue;
 
     switch (action)
     {
-    case 1:
+    case '1':
+        ifError = false;
         login();
         break;
-    case 2:
+    case '2':
+        ifError = false;
         regis();
         break;
     default:
+        ifError = true;
         printf("\033[;31m非法输入！\n\033[0m");
-        goto resetAction;
+        break;
     }
+    } while (ifError);
 }
 
 void nameFile(void)
@@ -97,10 +103,33 @@ void login(void)
         }
     } while (1);
     
-
+    printf("请输入密码。\n");
     printf("密码：\n");
     printf(">>> ");
     gets(in.password);
+
+    do
+    {
+        if (!strcmp(in.password, read.password))
+        {
+            break;
+        }
+        else
+        {
+            if (!feof(fp))
+            {
+                fread(&read, sizeof(USER), 1, fp);
+            }
+            else
+            {
+                printf("\033[;31m密码错误！\033[0m\n");
+                printf("请输入密码。\n");
+                printf("密码：\n");
+                printf(">>> ");
+                gets(in.password);
+            }
+        }
+    } while (1);
 
     if (fclose(fp) != 0)
     {
@@ -113,5 +142,5 @@ void login(void)
 
 void regis(void)
 {
-    
+
 }
