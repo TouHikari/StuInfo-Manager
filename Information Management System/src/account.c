@@ -1,25 +1,28 @@
 #include "..\include\headfiles.h"
 #include "..\include\account.h"
-#include "login.c"
+#include "..\include\login.h"
 
-extern char language[5];
-char identity[10];
-bool ifExit = false;
+extern char language[5];    // Declared in welcome.c
+char identity[10];          // Identity of user
+bool ifExit = false;        // If user wants to exit the whole program
+bool ifLogin = false;       // Login state
 
 void accountCore(void)
 {
-    while (1)
+    while (!ifLogin)
     {
+        // Enter only when user didn't login
         chooseIdentity();
         if (ifExit)
         {
+            ifExit = false;
             return;
         }
         menu();
     }
 }
 
-void chooseIdentity(void)
+void chooseIdentity(void)   // For user to choose identity
 {
     char mode;
     char input;
@@ -58,6 +61,7 @@ void chooseIdentity(void)
             guestLogin();
             break;
         case 'q':
+            ifError = false;
             ifExit = true;
             break;
         default:
@@ -65,10 +69,16 @@ void chooseIdentity(void)
             printf("\033[;31m非法输入！\n\033[0m");
             break;
         }
+
+        if (ifExit)
+        {
+            return;
+        }
+        
     } while (ifError);
 }
 
-void menu(void)
+void menu(void) // Menu page
 {
     char input;
     char action;
@@ -76,34 +86,40 @@ void menu(void)
 
     do
     {
-    printf("请选择操作：\n");
-    printf("1 - 登录\t");
-    printf("2 - 注册\n");
-    printf(">>> ");
-    scanf("%c", &action);
+        printf("请选择操作：\n");
+        printf("1 - 登录\t");
+        printf("2 - 注册\n");
+        printf("\t\t\t\t\t\tq - \033[;31m退出\n\033[0m");
+        printf(">>> ");
+        scanf("%c", &action);
 
-    while ((input = getchar()) != '\n')
-        continue;
+        while ((input = getchar()) != '\n')
+            continue;
 
-    switch (action)
-    {
-    case '1':
-        ifError = false;
-        login();
-        break;
-    case '2':
-        ifError = false;
-        regis();
-        break;
-    default:
-        ifError = true;
-        printf("\033[;31m非法输入！\n\033[0m");
-        break;
-    }
+        switch (action)
+        {
+        case '1':
+            ifError = false;
+            login();
+            break;
+        case '2':
+            ifError = false;
+            regis();
+            break;
+        case 'q':
+            ifError = false;
+            break;
+        default:
+            ifError = true;
+            printf("\033[;31m非法输入！\n\033[0m");
+            break;
+        }
+
     } while (ifError);
+    printf("--------------------退出登录/注册--------------------\n\n");
 }
 
-void adminLogin(void)
+void adminLogin(void)   // Administrator login prompt
 {
     strcpy(identity, "admin");
     printf("--------------------"
@@ -111,7 +127,7 @@ void adminLogin(void)
             "--------------------\n");
 }
 
-void staffLogin(void)
+void staffLogin(void)   // Staff login prompt
 {
     strcpy(identity, "staff");
     printf("--------------------"
@@ -119,7 +135,7 @@ void staffLogin(void)
             "--------------------\n");
 }
 
-void studentLogin(void)
+void studentLogin(void) // Student login prompt
 {
     strcpy(identity, "student");
     printf("--------------------"
@@ -127,7 +143,7 @@ void studentLogin(void)
             "--------------------\n");
 }
 
-void guestLogin(void)
+void guestLogin(void)   // Guest login prompt
 {
     strcpy(identity, "guest");
     printf("--------------------"
