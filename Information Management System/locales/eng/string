@@ -1,0 +1,11 @@
+shutting_down = Program is shutting down...
+choose_identity = Choose your identity: 
+illegal = Illegal input! 
+choose_action = Please choose an action: 
+admin = Admin
+staff = Staff
+student = Student
+guest = Guest
+exit = Exit
+login = Login
+regis = Register

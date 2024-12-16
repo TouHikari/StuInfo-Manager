@@ -2,8 +2,10 @@
 
 const char VERSION[] = "v0.0.1"; // VERSION
 
-extern char identity[10];   // Declared in account.c
-extern bool ifLogin;        // Declared in account.c
+extern LocalizationEntry * _entries_;   // Declared in localization.c
+extern int _entryCount_;                // Declared in localization.c
+extern char identity[10];               // Declared in account.c
+extern bool ifLogin;                    // Declared in account.c
 
 int main(void)
 {
@@ -15,6 +17,10 @@ int main(void)
 
     ifLogin = true;
 
-    printf("程序正在关闭...");  // Shutting down
+    // Shutting down
+    printf("%s",
+            localize("shutting_down", _entries_, _entryCount_));
+            
+    localizationRelease();  // Release RAM
     return 0;
 }

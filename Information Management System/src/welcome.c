@@ -1,17 +1,22 @@
 #include "..\include\headfiles.h"
 #include "..\include\welcome.h"
+#include "..\include\localization.h"
 
-char language[5];   // Language
-extern const char VERSION[];    // Declared in main.c
+char language[5];                       // Language
+
+extern const char VERSION[];            // Declared in main.c
+extern LocalizationEntry * _entries_;   // Declared in localization.c
+extern int _entryCount_;                // Declared in localization.c
 
 void welcomeCore(void)  // Welcome program
 {
     programInfo();
+    localizationLaunch(language);
 }
 
 void programInfo(void)  // Choose language and output info page
 {
-    char lang;
+    char langCode;
     char input;
     bool ifError = false;
 
@@ -21,12 +26,12 @@ void programInfo(void)  // Choose language and output info page
         printf("1 - 简体中文\t");
         printf("2 - English\n");
         printf(">>> ");
-        scanf("%c", &lang);
+        scanf("%c", &langCode);
 
         while ((input = getchar()) != '\n')
             continue;
 
-        switch (lang)
+        switch (langCode)
         {
         case '1':
             ifError = false;
