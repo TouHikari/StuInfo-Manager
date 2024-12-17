@@ -15,4 +15,4 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-#endif // headfiles.h
+#endif

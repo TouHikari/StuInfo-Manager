@@ -9,8 +9,8 @@
 #ifndef _STUDENT_H_
 #define _STUDENT_H_
 
-#include "..\include\headfiles.h"
+#include "../include/headfiles.h"
 
 void studentsCore(void);
 
-#endif // student.h
+#endif

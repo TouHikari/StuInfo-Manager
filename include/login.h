@@ -10,9 +10,9 @@
 #ifndef _LOGIN_H_
 #define _LOGIN_H_
 
-#include "..\include\headfiles.h"
-#include "..\include\localization.h"
-#include "..\include\output.h"
+#include "../include/headfiles.h"
+#include "../include/localization.h"
+#include "../include/output.h"
 
 #define MAX_ID 15           // Maximum of length of ID
 #define MAX_PASSWORD 30     // Maximum of length of password
@@ -32,4 +32,4 @@ void regis(void);           // Register module
 void nameFile(char []);     // Determine file name
 void getPassword(char []);  // Get password in non echo mode
 
-#endif // login.h
+#endif

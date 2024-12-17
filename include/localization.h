@@ -9,7 +9,7 @@
 #ifndef _LOCALIZATION_H_
 #define _LOCALIZATION_H_
 
-#include "..\include\headfiles.h"
+#include "../include/headfiles.h"
 
 // The structure of localized resources
 typedef struct
@@ -27,4 +27,4 @@ void loadLocalizationFile(const char *, LocalizationEntry **, int *);
 // Get localized text based on keys
 const char * localize(const char *, LocalizationEntry *, int);
 
-#endif // localization.h
+#endif

@@ -23,4 +23,4 @@
 // Simplified way to localize
 #define local(key) localize(key, _entries_, _entryCount_)
 
-#endif // output.h
+#endif
