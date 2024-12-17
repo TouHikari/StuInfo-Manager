@@ -1,11 +1,21 @@
-#include "..\include\headfiles.h"
+/*
+* File: login.c
+* Author: TouHikari
+* Date: 2024-12-17
+* Description: Include fuctions for login and register
+* Version: 0.0.2
+*/
+
 #include "..\include\login.h"
 
 extern char identity[10];   // Declared in account.c
 extern bool ifLogin;        // Declared in account.c
+extern LocalizationEntry * _entries_;   // Declared in localization.c
+extern int _entryCount_;                // Declared in localization.c
 char filename[20];          // Store name of the file that will be used
 
-void login(void)    // Login module
+// Login module
+void login(void)
 {
     USER in, read;          // USER is defined in login.h
     FILE *fp;               // File ptr
@@ -16,17 +26,15 @@ void login(void)    // Login module
     if ((fp = fopen(filename, "rb")) == NULL) // Read file by binary mode.
     {
         // Enter when failed to read
-        fprintf(stderr,
-                "\033[;31m读取%s失败！文件不存在或无权限。\033[0m\n",
-                filename);
+        fprintf(stderr, _RED("%s: %s\n"), filename, local("read_failed"));
         exit(EXIT_FAILURE);
     }
 
     fread(&read, sizeof(USER), 1, fp); // Read structure by structure
 
     // Get ID input
-    printf("请输入要登录的账号。\n");
-    printf("账号/ID：\n");
+    printf("%s\n", local("input_ID"));
+    printf("%s\n", local("ID_is"));
     printf(">>> ");
     gets(in.id);
 
@@ -47,14 +55,15 @@ void login(void)    // Login module
             {
                 rewind(fp); // Reset file ptr to the beginning
                 // Get ID input again
-                printf("\033[;31m账号不存在！如忘记账号请联系管理员！\033[0m\n");
+                printf(_RED("%s\n"), local("account_no_exist"));
                 if (tryCount >= MAX_TRY_COUNT)  // Try how many times exit
                 {
-                    printf("\033[;31m重试次数已达%d次！\033[0m\n", MAX_TRY_COUNT);
+                    printf(_RED("%s (%d)\n"),
+                            local("over_tries"), MAX_TRY_COUNT);
                     return;
                 }
-                printf("请重新输入账号。\n");
-                printf("账号/ID：\n");
+                printf("%s\n", local("re_input_ID"));
+                printf("%s\n", local("ID_is"));
                 printf(">>> ");
                 gets(in.id);
                 tryCount++;
@@ -63,8 +72,8 @@ void login(void)    // Login module
     } while (1);
     
     // Get password input
-    printf("请输入密码。\n");
-    printf("密码：\n");
+    printf("%s\n", local("input_pwd"));
+    printf("%s\n", local("pwd_is"));
     printf(">>> ");
     gets(in.password);
 
@@ -84,14 +93,15 @@ void login(void)    // Login module
             else
             {
                 rewind(fp);
-                printf("\033[;31m密码错误！如忘记密码请联系管理员！\033[0m\n");
+                printf(_RED("%s\n"), local("pwd_incorrect"));
                 if (tryCount >= MAX_TRY_COUNT)
                 {
-                    printf("\033[;31m重试次数已达%d次！\033[0m\n", MAX_TRY_COUNT);
+                    printf(_RED("%s (%d)\n"),
+                            local("over_tries"), MAX_TRY_COUNT);
                     return;
                 }
-                printf("请重新输入密码。\n");
-                printf("密码：\n");
+                printf("%s\n", local("re_input_pwd"));
+                printf("%s\n", local("pwd_is"));
                 printf(">>> ");
                 gets(in.password);
                 tryCount++;
@@ -101,19 +111,18 @@ void login(void)    // Login module
 
     // Succeed to login
     ifLogin = true;
-    printf("\033[;32m账号登录成功！\033[0m\n");
+    printf(_GREEN("%s\n"), local("login_succeeded"));
 
     if (fclose(fp) != 0)    // Close file
     {
         // Enter when failed to close
-        fprintf(stderr,
-                "\033[;31m关闭%s失败！文件不存在或无权限。\033[0m\n",
-                filename);
+        fprintf(stderr, _RED("%s: %s\n"), filename, local("close_failed"));
         exit(EXIT_FAILURE);
     }
 }
 
-void regis(void)    // Register module
+// Register module
+void regis(void)
 {
     USER in = { .password = "" };   // Initialize in.password
     USER read;
@@ -125,17 +134,15 @@ void regis(void)    // Register module
 
     if ((fp = fopen(filename, "rb")) == NULL)
     {
-        fprintf(stderr,
-                "\033[;31m读取%s失败！文件不存在或无权限。\033[0m\n",
-                filename);
+        fprintf(stderr, _RED("%s: %s\n"), filename, local("read_failed"));
         exit(EXIT_FAILURE);
     }
 
     fread(&read, sizeof(USER), 1, fp);
 
     // Get ID input
-    printf("请输入要注册的账号。\n");
-    printf("账号/ID：\n");
+    printf("%s\n", local("regis_ID"));
+    printf("%s\n", local("ID_is"));
     printf(">>> ");
     gets(in.id);
 
@@ -156,14 +163,15 @@ void regis(void)    // Register module
         else
         {
             rewind(fp);
-            printf("\033[;31m账号已存在！如忘记密码请联系管理员！\033[0m\n");
+            printf(_RED("%s\n"), local("account_already_exist"));
             if (tryCount >= MAX_TRY_COUNT)
             {
-                printf("\033[;31m重试次数已达%d次！\033[0m\n", MAX_TRY_COUNT);
+                printf(_RED("%s (%d)\n"),
+                        local("over_tries"), MAX_TRY_COUNT);
                 return;
             }
-            printf("请重新输入要注册的账号。\n");
-            printf("账号/ID：\n");
+            printf("%s\n", local("re_regis_ID"));
+            printf("%s\n", local("ID_is"));
             printf(">>> ");
             gets(in.id);
             tryCount++;
@@ -171,15 +179,15 @@ void regis(void)    // Register module
     } while (1);
 
     // Get name input
-    printf("请输入注册人姓名：\n");
+    printf("%s\n", local("input_name"));
     printf(">>> ");
     gets(in.name);
 
     // Get password input
-    printf("请输入密码：\n");
+    printf("%s\n", local("input_pwd"));
     printf(">>> ");
     getPassword(in.password);
-    printf("确认密码：\n"); // Confirm password input
+    printf("%s\n", local("confirm_pwd")); // Confirm password input
     printf(">>> ");
     getPassword(passwordTemp);
 
@@ -190,27 +198,26 @@ void regis(void)    // Register module
 		{
 			if ((fp = fopen(filename, "ab")) == NULL)
             {
-                fprintf(stderr,
-                        "\033[;31m读取%s失败！文件不存在或无权限。\033[0m\n",
-                        filename);
+                fprintf(stderr, _RED("%s: %s\n"), filename, local("read_failed"));
                 exit(EXIT_FAILURE);
             }
 			fwrite(&in, sizeof(USER), 1, fp);
-			printf("\033[;32m账号注册成功！\033[0m\n\n");
+			printf(_GREEN("%s\n\n"), local("regis_success"));
             break;
 		}
 		else
 		{
-            printf("\033[;31m两次密码不相同！\033[0m\n");
+            printf(_RED("%s\n"), local("different_pwd"));
             if (tryCount >= MAX_TRY_COUNT)
             {
-                printf("\033[;31m重试次数已达%d次！\033[0m\n", MAX_TRY_COUNT);
+                printf(_RED("%s (%d)\n"),
+                        local("over_tries"), MAX_TRY_COUNT);
                 return;
             }
-			printf("请重新输入密码：\n");
+			printf("%s\n", local("re_input_pwd"));
             printf(">>> ");
             getPassword(in.password);
-            printf("确认密码：\n");
+            printf("%s\n", local("confirm_pwd"));
             printf(">>> ");
             getPassword(passwordTemp);
             tryCount++;
@@ -219,14 +226,13 @@ void regis(void)    // Register module
 
     if (fclose(fp) != 0)
     {
-        fprintf(stderr,
-                "\033[;31m关闭%s失败！文件不存在或无权限。\033[0m\n",
-                filename);
+        fprintf(stderr, _RED("%s: %s\n"), filename, local("close_failed"));
         exit(EXIT_FAILURE);
     }
 }
 
-void nameFile(char filename[])  // Determine file name
+// Determine file name
+void nameFile(char filename[])
 {
     if (strcmp(identity, "admin") == 0)
     {
@@ -246,7 +252,8 @@ void nameFile(char filename[])  // Determine file name
     }
 }
 
-void getPassword(char pwd[])    // Get password in non echo mode
+// Get password in non echo mode
+void getPassword(char pwd[])
 {
     int i = 0;  // Cycle counter
     char ch;

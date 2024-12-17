@@ -1,4 +1,11 @@
-#include "..\include\headfiles.h"
+/*
+* File: localization.c
+* Author: TouHikari
+* Date: 2024-12-17
+* Description: Include localization implementation
+* Version: 0.0.2
+*/
+
 #include "..\include\localization.h"
 
 LocalizationEntry * _entries_;
@@ -35,13 +42,13 @@ void loadLocalizationFile(const char * lang, LocalizationEntry ** entries,
     char filePath[50];
 
     // Put together file path, such as "locales/eng/strings"
-    snprintf(filePath, sizeof(filePath), "locales/%s/string", lang);
+    snprintf(filePath, sizeof(filePath), "locales/%s/string.txt", lang);
 
     // Open localization resource file
     if ((fp = fopen(filePath, "r")) == NULL)
     {
         fprintf(stderr,
-                "\033[;31mFailed to open \"locales/%s/string\"\n\033[0m",
+                "\033[;31mFailed to open \"locales/%s/string.txt\"\n\033[0m",
                 lang);
         exit(EXIT_FAILURE);
     }
@@ -75,7 +82,8 @@ void loadLocalizationFile(const char * lang, LocalizationEntry ** entries,
             end[1] = '\0';
 
             // Add to the localizations array
-            localizations = realloc(localizations, (count + 1) * sizeof(LocalizationEntry));
+            localizations = realloc(localizations,
+                                    (count + 1) * sizeof(LocalizationEntry));
             localizations[count].key = strdup(key);
             localizations[count].value = strdup(value);
             count++;

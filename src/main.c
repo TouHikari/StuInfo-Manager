@@ -1,6 +1,14 @@
+/*
+* File: main.c
+* Author: TouHikari
+* Date: 2024-12-17
+* Description: Main file
+* Version: 0.0.2
+*/
+
 #include "..\include\main.h"
 
-const char VERSION[] = "v0.0.1"; // VERSION
+const char VERSION[] = "v0.0.2"; // VERSION
 
 extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
@@ -9,7 +17,7 @@ extern bool ifLogin;                    // Declared in account.c
 
 int main(void)
 {
-    // Get language that user wants and output a welcome page
+    // Get language that user uses and output a welcome page
     welcomeCore();
 
     // Login and register accounts
@@ -18,9 +26,9 @@ int main(void)
     ifLogin = true;
 
     // Shutting down
-    printf("%s",
-            localize("shutting_down", _entries_, _entryCount_));
+    printf("%s", local("shutting_down"));
             
     localizationRelease();  // Release RAM
+    
     return 0;
 }

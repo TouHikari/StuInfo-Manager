@@ -1,5 +1,15 @@
+/*
+* File: localization.h
+* Author: TouHikari
+* Date: 2024-12-17
+* Description: Include headfiles and function prototypes for localization.c
+* Version: 0.0.2
+*/
+
 #ifndef _LOCALIZATION_H_
 #define _LOCALIZATION_H_
+
+#include "..\include\headfiles.h"
 
 // The structure of localized resources
 typedef struct

@@ -1,5 +1,18 @@
+/*
+* File: login.h
+* Author: TouHikari
+* Date: 2024-12-17
+* Description: Include headfiles, macro definitions and
+*              function prototypes for login.c
+* Version: 0.0.2
+*/
+
 #ifndef _LOGIN_H_
 #define _LOGIN_H_
+
+#include "..\include\headfiles.h"
+#include "..\include\localization.h"
+#include "..\include\output.h"
 
 #define MAX_ID 15           // Maximum of length of ID
 #define MAX_PASSWORD 30     // Maximum of length of password

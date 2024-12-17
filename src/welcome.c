@@ -1,6 +1,12 @@
-#include "..\include\headfiles.h"
+/*
+* File: localization.c
+* Author: TouHikari
+* Date: 2024-12-17
+* Description: Output welcome page and launch localization
+* Version: 0.0.2
+*/
+
 #include "..\include\welcome.h"
-#include "..\include\localization.h"
 
 char language[5];                       // Language
 
@@ -8,13 +14,15 @@ extern const char VERSION[];            // Declared in main.c
 extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
 
-void welcomeCore(void)  // Welcome program
+// Welcome program
+void welcomeCore(void)
 {
     programInfo();
     localizationLaunch(language);
 }
 
-void programInfo(void)  // Choose language and output info page
+// Choose language and output info page
+void programInfo(void)
 {
     char langCode;
     char input;
@@ -43,13 +51,14 @@ void programInfo(void)  // Choose language and output info page
             break;
         default:
             ifError = true;
-            printf("\033[;31m非法输入！|Invalid input!\n\033[0m");
+            printf(_RED("非法输入！|Invalid input!\n"));
             break;
         }
     } while (ifError);
 }
 
-void welcome_chs(void)  // Simplified Chinese info page
+// Simplified Chinese info page
+void welcome_chs(void)
 {
     strcpy(language, "chs");
     printf("\n*******************************************************\n");
@@ -60,7 +69,8 @@ void welcome_chs(void)  // Simplified Chinese info page
     printf("*******************************************************\n\n");
 }
 
-void welcome_eng(void)  // English info page
+// English info page
+void welcome_eng(void)
 {
     strcpy(language, "eng");
     printf("\n*******************************************************\n");

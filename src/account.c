@@ -1,7 +1,12 @@
-#include "..\include\headfiles.h"
+/*
+* File: account.c
+* Author: TouHikari
+* Date: 2024-12-17
+* Description: Manage accounts, including menu page
+* Version: 0.0.2
+*/
+
 #include "..\include\account.h"
-#include "..\include\login.h"
-#include "..\include\localization.h"
 
 char identity[10];          // Identity of user
 bool ifExit = false;        // If user wants to exit the whole program
@@ -11,6 +16,7 @@ extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
 extern char language[5];    // Declared in welcome.c
 
+// Login and register accounts
 void accountCore(void)
 {
     while (!ifLogin)
@@ -26,7 +32,8 @@ void accountCore(void)
     }
 }
 
-void chooseIdentity(void)   // For user to choose identity
+// For user to choose identity
+void chooseIdentity(void)
 {
     char mode;
     char input;
@@ -34,18 +41,12 @@ void chooseIdentity(void)   // For user to choose identity
 
     do
     {
-        printf("%s\n",
-                localize("choose_identity", _entries_, _entryCount_));
-        printf("1 - \033[;33m%s\t\033[0m",
-                localize("admin", _entries_, _entryCount_));
-        printf("2 - \033[;32m%s\t\033[0m",
-                localize("staff", _entries_, _entryCount_));
-        printf("3 - \033[;34m%s\t\033[0m",
-                localize("student", _entries_, _entryCount_));
-        printf("4 - \033[;35m%s\n\033[0m",
-                localize("guest", _entries_, _entryCount_));
-        printf("\t\t\t\t\t\tq - \033[;31m%s\n\033[0m",
-                localize("exit", _entries_, _entryCount_));
+        printf("%s\n", local("choose_identity"));
+        printf("1 - " _YELLOW("%s\t"), local("admin"));
+        printf("2 - " _GREEN("%s\t"), local("staff"));
+        printf("3 - " _BLUE("%s\t"), local("student"));
+        printf("4 - " _PURPLE("%s\n"), local("guest"));
+        printf("\t\t\t\t\t\tq - " _RED("%s\n"), local("exit"));
         printf(">>> ");
         scanf("%c", &mode);
 
@@ -76,8 +77,7 @@ void chooseIdentity(void)   // For user to choose identity
             break;
         default:
             ifError = true;
-            printf("\033[;31m%s\n\033[0m",
-                    localize("illegal", _entries_, _entryCount_));
+            printf(_RED("%s\n"), local("illegal"));
             break;
         }
 
@@ -89,7 +89,8 @@ void chooseIdentity(void)   // For user to choose identity
     } while (ifError);
 }
 
-void menu(void) // Menu page
+// Menu page
+void menu(void)
 {
     char input;
     char action;
@@ -97,14 +98,10 @@ void menu(void) // Menu page
 
     do
     {
-        printf("%s\n",
-                localize("choose_action", _entries_, _entryCount_));
-        printf("1 - %s\t",
-                localize("login", _entries_, _entryCount_));
-        printf("2 - %s\n",
-                localize("regis", _entries_, _entryCount_));
-        printf("\t\t\t\t\t\tq - \033[;31m%s\n\033[0m",
-                localize("exit", _entries_, _entryCount_));
+        printf("%s\n", local("choose_action"));
+        printf("1 - %s\t", local("login"));
+        printf("2 - %s\n", local("regis"));
+        printf("\t\t\t\t\t\tq - " _RED("%s\n"), local("exit"));
         printf(">>> ");
         scanf("%c", &action);
 
@@ -126,58 +123,43 @@ void menu(void) // Menu page
             break;
         default:
             ifError = true;
-            printf("\033[;31m%s\n\033[0m",
-                    localize("illegal", _entries_, _entryCount_));
+            printf(_RED("%s\n"), local("illegal"));
             break;
         }
 
     } while (ifError);
     printf("--------------------%s %s/%s--------------------\n\n",
-            localize("exit", _entries_, _entryCount_),
-            localize("login", _entries_, _entryCount_),
-            localize("regis", _entries_, _entryCount_));
+            local("exit"), local("login"), local("regis"));
 }
 
-void adminLogin(void)   // Administrator login prompt
+// Administrator login prompt
+void adminLogin(void)
 {
     strcpy(identity, "admin");
-    printf("--------------------"
-            "\033[;33m%s %s/%s\033[0m"
-            "--------------------\n",
-            localize("admin", _entries_, _entryCount_),
-            localize("login", _entries_, _entryCount_),
-            localize("regis", _entries_, _entryCount_));
+    printf("--------------------" _YELLOW("%s %s/%s") "--------------------\n",
+            local("admin"), local("login"), local("regis"));
 }
 
-void staffLogin(void)   // Staff login prompt
+// Staff login prompt
+void staffLogin(void)
 {
     strcpy(identity, "staff");
-    printf("--------------------"
-            "\033[;32m%s %s/%s\033[0m"
-            "--------------------\n",
-            localize("staff", _entries_, _entryCount_),
-            localize("login", _entries_, _entryCount_),
-            localize("regis", _entries_, _entryCount_));
+    printf("--------------------" _GREEN("%s %s/%s") "--------------------\n",
+            local("staff"), local("login"), local("regis"));
 }
 
-void studentLogin(void) // Student login prompt
+// Student login prompt
+void studentLogin(void)
 {
     strcpy(identity, "student");
-    printf("--------------------"
-            "\033[;34m%s %s/%s\033[0m"
-            "--------------------\n",
-            localize("student", _entries_, _entryCount_),
-            localize("login", _entries_, _entryCount_),
-            localize("regis", _entries_, _entryCount_));
+    printf("--------------------" _BLUE("%s %s/%s") "--------------------\n",
+            local("student"), local("login"), local("regis"));
 }
 
-void guestLogin(void)   // Guest login prompt
+// Guest login prompt
+void guestLogin(void)
 {
     strcpy(identity, "guest");
-    printf("--------------------"
-            "\033[;35m%s %s/%s\033[0m"
-            "--------------------\n",
-            localize("guest", _entries_, _entryCount_),
-            localize("login", _entries_, _entryCount_),
-            localize("regis", _entries_, _entryCount_));
+    printf("--------------------" _PURPLE("%s %s/%s") "--------------------\n",
+            local("guest"), local("login"), local("regis"));
 }
