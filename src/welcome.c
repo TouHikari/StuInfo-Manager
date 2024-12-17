@@ -6,7 +6,7 @@
 * Version: 0.0.2
 */
 
-#include "..\include\welcome.h"
+#include "../include/welcome.h"
 
 char language[5];                       // Language
 

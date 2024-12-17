@@ -6,7 +6,7 @@
 * Version: 0.0.2
 */
 
-#include "..\include\localization.h"
+#include "../include/localization.h"
 
 LocalizationEntry * _entries_;
 int _entryCount_;
@@ -42,13 +42,13 @@ void loadLocalizationFile(const char * lang, LocalizationEntry ** entries,
     char filePath[50];
 
     // Put together file path, such as "locales/eng/strings"
-    snprintf(filePath, sizeof(filePath), "locales/%s/string.txt", lang);
+    snprintf(filePath, sizeof(filePath), "locales/%s.txt", lang);
 
     // Open localization resource file
     if ((fp = fopen(filePath, "r")) == NULL)
     {
         fprintf(stderr,
-                "\033[;31mFailed to open \"locales/%s/string.txt\"\n\033[0m",
+                "\033[;31mFailed to open \"locales/%s.txt\"\n\033[0m",
                 lang);
         exit(EXIT_FAILURE);
     }

@@ -6,7 +6,7 @@
 * Version: 0.0.2
 */
 
-#include "..\include\account.h"
+#include "../include/account.h"
 
 char identity[10];          // Identity of user
 bool ifExit = false;        // If user wants to exit the whole program

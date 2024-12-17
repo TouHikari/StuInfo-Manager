@@ -6,7 +6,7 @@
 * Version: 0.0.2
 */
 
-#include "..\include\login.h"
+#include "../include/login.h"
 
 extern char identity[10];   // Declared in account.c
 extern bool ifLogin;        // Declared in account.c

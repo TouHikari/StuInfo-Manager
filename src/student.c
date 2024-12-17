@@ -6,10 +6,9 @@
 * Version: 0.0.2
 */
 
-#include "..\include\student.h"
+#include "../include/student.h"
 
 void studentsCore(void)
 {
-
     return;
 }
