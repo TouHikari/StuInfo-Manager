@@ -1,0 +1,12 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+PROJECT(StuInfo-Manager)
+INCLUDE_DIRECTORIES(
+        include
+)
+AUX_SOURCE_DIRECTORY(
+        src DIR_SRCS
+)
+ADD_EXECUTABLE(
+        StuInfo-Manager
+        ${DIR_SRCS}
+)
