@@ -35,7 +35,7 @@ void accountCore(void)
 // For user to choose identity
 void chooseIdentity(void)
 {
-    char mode;
+    char ident;
     char input;
     bool ifError = false;
 
@@ -48,12 +48,12 @@ void chooseIdentity(void)
         printf("4 - " _PURPLE("%s\n"), local("guest"));
         printf("\t\t\t\t\t\tq - " _RED("%s\n"), local("exit"));
         printf(">>> ");
-        scanf("%c", &mode);
+        scanf("%c", &ident);
 
         while ((input = getchar()) != '\n')
             continue;
 
-        switch (mode)
+        switch (ident)
         {
         case '1':
             ifError = false;
@@ -100,8 +100,8 @@ void menu(void)
     {
         printf("%s\n", local("choose_action"));
         printf("1 - %s\t", local("login"));
-        printf("2 - %s\n", local("regis"));
-        printf("\t\t\t\t\t\tq - " _RED("%s\n"), local("exit"));
+        printf("2 - %s\t", local("regis"));
+        printf("\t\tq - " _RED("%s\n"), local("exit"));
         printf(">>> ");
         scanf("%c", &action);
 

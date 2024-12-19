@@ -6,8 +6,6 @@
 * Version: 0.0.2
 */
 
-#include <stdlib.h>
-
 #include "../include/main.h"
 
 const char VERSION[] = "v0.0.2"; // VERSION
@@ -30,11 +28,9 @@ int main(void)
     // Login and register accounts
     accountCore();
 
-    ifLogin = true;
-
     // Shutting down
     printf("%s", local("shutting_down"));
-            
+
     localizationRelease();  // Release RAM
     
     return 0;

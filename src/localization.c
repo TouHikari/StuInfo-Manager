@@ -41,7 +41,7 @@ void loadLocalizationFile(const char * lang, LocalizationEntry ** entries,
     FILE* fp;
     char filePath[50];
 
-    // Put together file path, such as "locales/eng/strings"
+    // Put together file path, such as "locales/eng.txt"
     snprintf(filePath, sizeof(filePath), "locales/%s.txt", lang);
 
     // Open localization resource file

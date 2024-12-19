@@ -2,8 +2,8 @@
 * File: welcome.h
 * Author: TouHikari
 * Date: 2024-12-17
-* Description: Include headfiles, macro definitions and
-*              function prototypes for welcome.c
+* Description: Include headfiles, macro definitions and function prototypes
+*              for welcome.c
 * Version: 0.0.2
 */
 

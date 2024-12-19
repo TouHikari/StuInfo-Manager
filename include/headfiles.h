@@ -2,7 +2,7 @@
 * File: headfiles.h
 * Author: TouHikari
 * Date: 2024-12-17
-* Description: Standard header file that used in the program
+* Description: Standard header files that are used in the program
 * Version: 0.0.2
 */
 

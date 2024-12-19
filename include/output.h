@@ -2,8 +2,8 @@
 * File: output.h
 * Author: TouHikari
 * Date: 2024-12-17
-* Description: Include headfiles, macro definitions and
-*              function prototypes for output.c
+* Description: Include headfiles, macro definitions and function prototypes
+*              for output.c
 * Version: 0.0.2
 */
 

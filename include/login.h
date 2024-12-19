@@ -22,6 +22,7 @@
 
 typedef struct User         // Structure of user data
 {
+    int identity;   // 1 - Admin, 2 - Staff, 3 - Student, 4 - guest
     char id[MAX_ID];
     char password[MAX_PASSWORD];
     char name[MAX_NAME];
@@ -29,7 +30,7 @@ typedef struct User         // Structure of user data
 
 void login(void);           // Login module
 void regis(void);           // Register module
-void nameFile(char []);     // Determine file name
+void nameFile(char [], USER * in);     // Determine file name
 void getPassword(char []);  // Get password in non echo mode
 
 #endif

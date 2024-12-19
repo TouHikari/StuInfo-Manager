@@ -8,11 +8,12 @@
 
 #include "../include/login.h"
 
+char filename[20];          // Store name of the file that will be used
+
 extern char identity[10];   // Declared in account.c
 extern bool ifLogin;        // Declared in account.c
 extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
-char filename[20];          // Store name of the file that will be used
 
 // Login module
 void login(void)
@@ -21,12 +22,12 @@ void login(void)
     FILE *fp;               // File ptr
     int tryCount = 1;       // User's error attempt counter
 
-    nameFile(filename);             // Name filename[20];
+    nameFile(filename, &in);             // Name filename[20];
 
-    if ((fp = fopen(filename, "rb")) == NULL) // Read file by binary mode.
+    if ((fp = fopen("bin/login.dat", "rb")) == NULL) // Read file by binary mode
     {
         // Enter when failed to read
-        fprintf(stderr, _RED("%s: %s\n"), filename, local("read_failed"));
+        fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("read_failed"));
         exit(EXIT_FAILURE);
     }
 
@@ -75,7 +76,7 @@ void login(void)
     printf("%s\n", local("input_pwd"));
     printf("%s\n", local("pwd_is"));
     printf(">>> ");
-    gets(in.password);
+    getPassword(in.password);
 
     tryCount = 1;
     do
@@ -103,7 +104,7 @@ void login(void)
                 printf("%s\n", local("re_input_pwd"));
                 printf("%s\n", local("pwd_is"));
                 printf(">>> ");
-                gets(in.password);
+                getPassword(in.password);
                 tryCount++;
             }
         }
@@ -116,7 +117,7 @@ void login(void)
     if (fclose(fp) != 0)    // Close file
     {
         // Enter when failed to close
-        fprintf(stderr, _RED("%s: %s\n"), filename, local("close_failed"));
+        fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("close_failed"));
         exit(EXIT_FAILURE);
     }
 }
@@ -130,11 +131,11 @@ void regis(void)
     char passwordTemp[MAX_PASSWORD];
     int tryCount = 1;
 
-    nameFile(filename);
+    nameFile(filename, &in);
 
-    if ((fp = fopen(filename, "rb")) == NULL)
+    if ((fp = fopen("bin/login.dat", "rb")) == NULL)
     {
-        fprintf(stderr, _RED("%s: %s\n"), filename, local("read_failed"));
+        fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("read_failed"));
         exit(EXIT_FAILURE);
     }
 
@@ -196,9 +197,9 @@ void regis(void)
 	{
 		if (!strcmp(in.password, passwordTemp))
 		{
-			if ((fp = fopen(filename, "ab")) == NULL)
+			if ((fp = fopen("bin/login.dat", "ab")) == NULL)
             {
-                fprintf(stderr, _RED("%s: %s\n"), filename, local("read_failed"));
+                fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("read_failed"));
                 exit(EXIT_FAILURE);
             }
 			fwrite(&in, sizeof(USER), 1, fp);
@@ -226,29 +227,33 @@ void regis(void)
 
     if (fclose(fp) != 0)
     {
-        fprintf(stderr, _RED("%s: %s\n"), filename, local("close_failed"));
+        fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("close_failed"));
         exit(EXIT_FAILURE);
     }
 }
 
 // Determine file name
-void nameFile(char filename[])
+void nameFile(char filename[], USER * in)
 {
     if (strcmp(identity, "admin") == 0)
     {
         strcpy(filename, "bin/admin.dat");
+        in->identity = 1;
     }
     if (strcmp(identity, "staff") == 0)
     {
         strcpy(filename, "bin/staff.dat");
+        in->identity = 2;
     }
     if (strcmp(identity, "student") == 0)
     {
         strcpy(filename, "bin/student.dat");
+        in->identity = 3;
     }
     if (strcmp(identity, "guest") == 0)
     {
         strcpy(filename, "bin/guest.dat");
+        in->identity = 4;
     }
 }
 
@@ -257,33 +262,65 @@ void getPassword(char pwd[])
 {
     int i = 0;  // Cycle counter
     char ch;
+    
+    // LINUX
+    #ifdef __linux__
+        system("stty -echo");   // Turn off echo display
 
-    system("stty -echo");   // Turn off echo display
-
-    while (i < MAX_PASSWORD - 1)
-    {
-        ch = getchar();
-
-        if (ch == '\n')     // Exit when get '\n'
+        while (i < MAX_PASSWORD - 1)
         {
-            break;
-        }
-        else if (ch == 127 || ch == '\b')   // When get Delete or '\b'
-        {
-            if (i > 0)
+            ch = getchar();
+
+            if (ch == '\n')     // Exit when get '\n'
             {
-                i--;
-                printf("\b \b");
+                break;
+            }
+            else if (ch == 127 || ch == '\b')   // When get Delete or '\b'
+            {
+                if (i > 0)
+                {
+                    i--;
+                    printf("\b \b");
+                }
+            }
+            else    // When get normal char
+            {
+                pwd[i++] = ch;
+                printf("*");
             }
         }
-        else    // When get normal char
-        {
-            pwd[i++] = ch;
-            printf("*");
-        }
-    }
-    pwd[i] = '\0';  // String ends with '\0' 
+        pwd[i] = '\0';  // String ends with '\0' 
 
-    system("stty echo");    // Turn on echo display
-    printf("\n");
+        system("stty echo");    // Turn on echo display
+        printf("\n");
+    #endif
+
+    // WINDOWS
+    #ifdef _WIN32
+        #include <conio.h>
+        while (i < MAX_PASSWORD)
+        {
+            ch = getch();
+
+            if ('\n' == ch || '\r' == ch)     // Exit when get '\n'
+            {
+                break;
+            }
+            else if (127 == ch || '\b' == ch)   // When get Delete or '\b'
+            {
+                if (i > 0)
+                {
+                    i--;
+                    printf("\b \b");
+                }
+            }
+            else    // When get normal char
+            {
+                pwd[i++] = ch;
+                printf("*");
+            }
+        }
+        printf("\n");
+    #endif
+
 }
