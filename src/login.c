@@ -1,7 +1,7 @@
 /*
 * File: login.c
 * Author: TouHikari
-* Date: 2024-12-17
+* Date: 2024-12-19
 * Description: Include fuctions for login and register
 * Version: 0.0.2
 */
@@ -14,28 +14,30 @@ extern char identity[10];   // Declared in account.c
 extern bool ifLogin;        // Declared in account.c
 extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
+extern Student localAccount;
 
 // Login module
 void login(void)
 {
-    USER in, read;          // USER is defined in login.h
+    Student in, read;          // Student is defined in login.h
     FILE *fp;               // File ptr
     int tryCount = 1;       // User's error attempt counter
 
     nameFile(filename, &in);             // Name filename[20];
 
-    if ((fp = fopen("bin/login.dat", "rb")) == NULL) // Read file by binary mode
+    // Read file by binary mode
+    if ((fp = fopen("bin/login.dat", "rb")) == NULL)
     {
         // Enter when failed to read
-        fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("read_failed"));
+        fprintf(stderr, _RED("%s: %s\n"),
+                "bin/login.dat", local("read_failed"));
         exit(EXIT_FAILURE);
     }
 
-    fread(&read, sizeof(USER), 1, fp); // Read structure by structure
+    fread(&read, sizeof(Student), 1, fp); // Read structure by structure
 
     // Get ID input
     printf("%s\n", local("input_ID"));
-    printf("%s\n", local("ID_is"));
     printf(">>> ");
     gets(in.id);
 
@@ -50,7 +52,7 @@ void login(void)
         {
             if (!feof(fp))  // Keep finding until EOF
             {
-                fread(&read, sizeof(USER), 1, fp);
+                fread(&read, sizeof(Student), 1, fp);
             }
             else
             {
@@ -64,7 +66,6 @@ void login(void)
                     return;
                 }
                 printf("%s\n", local("re_input_ID"));
-                printf("%s\n", local("ID_is"));
                 printf(">>> ");
                 gets(in.id);
                 tryCount++;
@@ -74,7 +75,6 @@ void login(void)
     
     // Get password input
     printf("%s\n", local("input_pwd"));
-    printf("%s\n", local("pwd_is"));
     printf(">>> ");
     getPassword(in.password);
 
@@ -83,13 +83,14 @@ void login(void)
     {
         if (!strcmp(in.password, read.password))
         {
+            localAccount = read; // Store login account information separately
             break;
         }
         else
         {
             if (!feof(fp))
             {
-                fread(&read, sizeof(USER), 1, fp);
+                fread(&read, sizeof(Student), 1, fp);
             }
             else
             {
@@ -102,7 +103,6 @@ void login(void)
                     return;
                 }
                 printf("%s\n", local("re_input_pwd"));
-                printf("%s\n", local("pwd_is"));
                 printf(">>> ");
                 getPassword(in.password);
                 tryCount++;
@@ -117,7 +117,8 @@ void login(void)
     if (fclose(fp) != 0)    // Close file
     {
         // Enter when failed to close
-        fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("close_failed"));
+        fprintf(stderr, _RED("%s: %s\n"),
+                "bin/login.dat", local("close_failed"));
         exit(EXIT_FAILURE);
     }
 }
@@ -125,8 +126,8 @@ void login(void)
 // Register module
 void regis(void)
 {
-    USER in = { .password = "" };   // Initialize in.password
-    USER read;
+    Student in = { .password = "" };   // Initialize in.password
+    Student read;
     FILE *fp;
     char passwordTemp[MAX_PASSWORD];
     int tryCount = 1;
@@ -135,15 +136,15 @@ void regis(void)
 
     if ((fp = fopen("bin/login.dat", "rb")) == NULL)
     {
-        fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("read_failed"));
+        fprintf(stderr, _RED("%s: %s\n"),
+                "bin/login.dat", local("read_failed"));
         exit(EXIT_FAILURE);
     }
 
-    fread(&read, sizeof(USER), 1, fp);
+    fread(&read, sizeof(Student), 1, fp);
 
     // Get ID input
     printf("%s\n", local("regis_ID"));
-    printf("%s\n", local("ID_is"));
     printf(">>> ");
     gets(in.id);
 
@@ -154,7 +155,7 @@ void regis(void)
         {
             if (!feof(fp))
             {
-                fread(&read, sizeof(USER), 1, fp);
+                fread(&read, sizeof(Student), 1, fp);
             }
             else
             {
@@ -172,7 +173,6 @@ void regis(void)
                 return;
             }
             printf("%s\n", local("re_regis_ID"));
-            printf("%s\n", local("ID_is"));
             printf(">>> ");
             gets(in.id);
             tryCount++;
@@ -199,10 +199,11 @@ void regis(void)
 		{
 			if ((fp = fopen("bin/login.dat", "ab")) == NULL)
             {
-                fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("read_failed"));
+                fprintf(stderr, _RED("%s: %s\n"),
+                        "bin/login.dat", local("read_failed"));
                 exit(EXIT_FAILURE);
             }
-			fwrite(&in, sizeof(USER), 1, fp);
+			fwrite(&in, sizeof(Student), 1, fp);
 			printf(_GREEN("%s\n\n"), local("regis_success"));
             break;
 		}
@@ -227,33 +228,30 @@ void regis(void)
 
     if (fclose(fp) != 0)
     {
-        fprintf(stderr, _RED("%s: %s\n"), "bin/login.dat", local("close_failed"));
+        fprintf(stderr, _RED("%s: %s\n"),
+                "bin/login.dat", local("close_failed"));
         exit(EXIT_FAILURE);
     }
 }
 
 // Determine file name
-void nameFile(char filename[], USER * in)
+void nameFile(char filename[], Student * in)
 {
     if (strcmp(identity, "admin") == 0)
     {
         strcpy(filename, "bin/admin.dat");
-        in->identity = 1;
     }
     if (strcmp(identity, "staff") == 0)
     {
         strcpy(filename, "bin/staff.dat");
-        in->identity = 2;
     }
     if (strcmp(identity, "student") == 0)
     {
         strcpy(filename, "bin/student.dat");
-        in->identity = 3;
     }
     if (strcmp(identity, "guest") == 0)
     {
         strcpy(filename, "bin/guest.dat");
-        in->identity = 4;
     }
 }
 
@@ -271,11 +269,11 @@ void getPassword(char pwd[])
         {
             ch = getchar();
 
-            if (ch == '\n')     // Exit when get '\n'
+            if (ch == '\n')     // Exit when get line break
             {
                 break;
             }
-            else if (ch == 127 || ch == '\b')   // When get Delete or '\b'
+            else if (ch == 127 || ch == '\b')   // When get Delete or Backspace
             {
                 if (i > 0)
                 {
@@ -302,11 +300,11 @@ void getPassword(char pwd[])
         {
             ch = getch();
 
-            if ('\n' == ch || '\r' == ch)     // Exit when get '\n'
+            if ('\n' == ch || '\r' == ch)     // Exit when get line break
             {
                 break;
             }
-            else if (127 == ch || '\b' == ch)   // When get Delete or '\b'
+            else if (127 == ch || '\b' == ch)   // When get Delete or Backspace
             {
                 if (i > 0)
                 {

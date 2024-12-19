@@ -13,6 +13,7 @@
 #include "../include/login.h"
 #include "../include/localization.h"
 #include "../include/output.h"
+#include "../include/student.h"
 
 void chooseIdentity(void);  // For user to choose identity
 void menu(void);            // Menu page

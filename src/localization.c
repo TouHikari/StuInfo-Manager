@@ -70,22 +70,23 @@ void loadLocalizationFile(const char * lang, LocalizationEntry ** entries,
             key[strcspn(key, "\n")] = '\0';
             value[strcspn(value, "\n")] = '\0';
 
-            // Trim spaces around key and value
-            while (isspace((unsigned char) *key)) key++;
+            // Trim spaces around key
+            while (isspace((unsigned char) *key))
+                key++;
             char * end = key + strlen(key) - 1;
-            while (end > key && isspace((unsigned char) *end)) end--;
+            while (end > key && isspace((unsigned char) *end))
+                end--;
             end[1] = '\0';
 
-            while (isspace((unsigned char) *value)) value++;
-            end = value + strlen(value) - 1;
-            while (end > value && isspace((unsigned char) *end)) end--;
-            end[1] = '\0';
+            // Trim spaces at the start of value, but keep trailing spaces
+            while (isspace((unsigned char) *value))
+                value++;
 
             // Add to the localizations array
             localizations = realloc(localizations,
                                     (count + 1) * sizeof(LocalizationEntry));
             localizations[count].key = strdup(key);
-            localizations[count].value = strdup(value);
+            localizations[count].value = strdup(value); // Keep trailing spaces
             count++;
         }
     }

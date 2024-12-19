@@ -1,7 +1,7 @@
 /*
 * File: account.c
 * Author: TouHikari
-* Date: 2024-12-17
+* Date: 2024-12-19
 * Description: Manage accounts, including menu page
 * Version: 0.0.2
 */
@@ -11,6 +11,7 @@
 char identity[10];          // Identity of user
 bool ifExit = false;        // If user wants to exit the whole program
 bool ifLogin = false;       // Login state
+Student localAccount;
 
 extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
@@ -29,6 +30,22 @@ void accountCore(void)
             return;
         }
         menu();
+    }
+    if (strcmp(identity, "admin") == 0)
+    {
+        // adminCore();
+    }
+    if (strcmp(identity, "staff") == 0)
+    {
+        // staffCore();
+    }
+    if (strcmp(identity, "student") == 0)
+    {
+        studentsCore();
+    }
+    if (strcmp(identity, "guest") == 0)
+    {
+        // guestCore();
     }
 }
 
@@ -128,7 +145,8 @@ void menu(void)
         }
 
     } while (ifError);
-    printf("--------------------%s %s/%s--------------------\n\n",
+
+    printf("--------------------%s%s/%s--------------------\n\n",
             local("exit"), local("login"), local("regis"));
 }
 
@@ -136,7 +154,7 @@ void menu(void)
 void adminLogin(void)
 {
     strcpy(identity, "admin");
-    printf("--------------------" _YELLOW("%s %s/%s") "--------------------\n",
+    printf("--------------------" _YELLOW("%s%s/%s") "--------------------\n",
             local("admin"), local("login"), local("regis"));
 }
 
@@ -144,7 +162,7 @@ void adminLogin(void)
 void staffLogin(void)
 {
     strcpy(identity, "staff");
-    printf("--------------------" _GREEN("%s %s/%s") "--------------------\n",
+    printf("--------------------" _GREEN("%s%s/%s") "--------------------\n",
             local("staff"), local("login"), local("regis"));
 }
 
@@ -152,7 +170,7 @@ void staffLogin(void)
 void studentLogin(void)
 {
     strcpy(identity, "student");
-    printf("--------------------" _BLUE("%s %s/%s") "--------------------\n",
+    printf("--------------------" _BLUE("%s%s/%s") "--------------------\n",
             local("student"), local("login"), local("regis"));
 }
 
@@ -160,6 +178,6 @@ void studentLogin(void)
 void guestLogin(void)
 {
     strcpy(identity, "guest");
-    printf("--------------------" _PURPLE("%s %s/%s") "--------------------\n",
+    printf("--------------------" _PURPLE("%s%s/%s") "--------------------\n",
             local("guest"), local("login"), local("regis"));
 }
