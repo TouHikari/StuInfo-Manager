@@ -3,12 +3,12 @@
 * Author: TouHikari
 * Date: 2024-12-17
 * Description: Main file
-* Version: 0.0.2
+* Version: 1.0.0
 */
 
 #include "../include/main.h"
 
-const char VERSION[] = "v0.0.2"; // VERSION
+const char VERSION[] = "v1.0.0"; // VERSION
 
 extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
@@ -29,9 +29,9 @@ int main(void)
     accountCore();
 
     // Shutting down
-    printf("%s", local("shutting_down"));
+    printf(_GREEN("%s"), local("shutting_down"));
 
-    localizationRelease();  // Release RAM
+    localizationRelease(); // Release RAM
     
     return 0;
 }

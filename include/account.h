@@ -1,9 +1,9 @@
 /*
 * File: account.h
 * Author: TouHikari
-* Date: 2024-12-17
+* Date: 2025-01-03
 * Description: Include headfiles and function prototypes for account.c
-* Version: 0.0.2
+* Version: 0.1.0
 */
 
 #ifndef _ACCOUNT_H_
@@ -13,13 +13,19 @@
 #include "../include/login.h"
 #include "../include/localization.h"
 #include "../include/output.h"
+#include "../include/admin.h"
+#include "../include/staff.h"
 #include "../include/student.h"
+#include "../include/guest.h"
 
-void chooseIdentity(void);  // For user to choose identity
-void menu(void);            // Menu page
-void adminLogin(void);      // Administrator login prompt
-void staffLogin(void);      // Staff login prompt
-void studentLogin(void);    // Student login prompt
-void guestLogin(void);      // Guest login prompt
+#define MAX_IDENTITY 4
+
+// Function prototypes
+void chooseIdentity(void);               // For user to choose identity
+void menu(void);                         // Menu page
+void loginPrompt(const char *role);      // Login prompt for given role
+void nameFile(char *fileName);           // Determine the file name based on identity
+char getIdentityCode(const char *ident); // Get identity code
+void emptyInputBuffer(void);             // Clear input buffer
 
 #endif

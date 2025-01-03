@@ -3,7 +3,7 @@
 * Author: TouHikari
 * Date: 2024-12-17
 * Description: Output welcome page and launch localization
-* Version: 0.0.2
+* Version: 1.0.0
 */
 
 #include "../include/welcome.h"

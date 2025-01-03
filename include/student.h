@@ -14,14 +14,13 @@
 #include "../include/output.h"
 #include "../include/login.h"
 
-void studentsCore(void);
-void studentWelcome(void);
-void studentMenu(Student);
-void changePwd(void);
-void basicInfo(Student);
-void queryScores(void);
-void queryCurriculum(void);
-void manageEmail(void);
-void expressInfo(void);
+// Function prototypes
+void studentCore(void);     // User client core program
+void studentWelcome(void);  // Welcome student login
+void studentMenu(User, FILE*);     // Menu page
+void changePwd(User, FILE*);       // 
+void basicInfo(User);       // 
+void queryScores(void);     // 
+void queryCurriculum(void); // 
 
 #endif

@@ -3,7 +3,7 @@
 * Author: TouHikari
 * Date: 2024-12-17
 * Description: Include headfiles and function prototypes for localization.c
-* Version: 0.0.2
+* Version: 1.0.0
 */
 
 #ifndef _LOCALIZATION_H_
@@ -18,6 +18,7 @@ typedef struct
     const char * value;
 } LocalizationEntry;
 
+// Function prototypes
 // Localization startup module
 void localizationLaunch(char []);
 // Localization shutdown module

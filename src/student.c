@@ -1,48 +1,36 @@
 /*
 * File: student.c
 * Author: TouHikari
-* Date: 2024-12-19
+* Date: 2025-01-03
 * Description: Student client program
 * Version: 0.0.2
 */
 
 #include "../include/student.h"
 
-char stuFileName[MAX_ID];
-
 extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
-extern Student localAccount;
+extern User localAccount;
 
-// Student client core program
-void studentsCore(void)
+// User client core program
+void studentCore(void)
 {
-    Student read;       // Student is defined in login.h
+    User read;       // User is defined in login.h
     FILE *fp;           // File ptr
-    strcpy(stuFileName, localAccount.id);    // File name
 
-    // Read file by binary mode
-    if ((fp = fopen(stuFileName, "rb")) == NULL)
+    // Read file
+    openFile(&fp, "bin/student.txt", "r+");
+    for (int i = 0; i < localAccount.serialNum + 1; i++)
     {
-        // Enter when failed to read
-        fprintf(stderr, _RED("%s: %s\n"),
-                stuFileName, local("read_failed"));
-        exit(EXIT_FAILURE);
+        fread(&read, sizeof(User), 1, fp); // Read structure by structure
     }
-    fread(&read, sizeof(Student), 1, fp); // Read structure by structure
 
     studentWelcome();
 
-    studentMenu(read);
+    studentMenu(read, fp);
 
     // Close file
-    if (fclose(fp) != 0)
-    {
-        // Enter when failed to close
-        fprintf(stderr, _RED("%s: %s\n"),
-                stuFileName, local("close_failed"));
-        exit(EXIT_FAILURE);
-    }
+    closeFile(&fp, "bin/student.txt");
 }
 
 // Welcome student login
@@ -54,11 +42,11 @@ void studentWelcome(void)
 }
 
 // Menu page
-void studentMenu(Student read)
+void studentMenu(User read, FILE * fp)
 {
     char input;
     char action;
-    bool ifError = false;
+    bool ifExit = false;
 
     do
     {
@@ -67,9 +55,7 @@ void studentMenu(Student read)
         printf("2 - %s\t", local("basic_information"));
         printf("3 - %s\n", local("query_scores"));
         printf("4 - %s\t", local("query_curriculum"));
-        printf("5 - %s\t", local("manage_email"));
-        printf("6 - %s\n", local("express_info"));
-        printf("\t\t\t\t\t\tq - " _RED("%s\n"), local("exit"));
+        printf("\t\tq - " _RED("%s\n"), local("exit"));
         printf(">>> ");
         scanf("%c", &action);
 
@@ -79,69 +65,187 @@ void studentMenu(Student read)
         switch (action)
         {
         case '1':
-            ifError = false;
-            changePwd();
+            changePwd(read, fp);
             break;
         case '2':
-            ifError = false;
-            basicInfo(read);
+            basicInfo(localAccount);
             break;
         case '3':
-            ifError = false;
             queryScores();
             break;
         case '4':
-            ifError = false;
             queryCurriculum();
             break;
-        case '5':
-            ifError = false;
-            manageEmail();
-            break;
-        case '6':
-            ifError = false;
-            expressInfo();
         case 'q':
-            ifError = false;
+            ifExit = true;
             break;
         default:
-            ifError = true;
             printf(_RED("%s\n"), local("illegal"));
             break;
         }
-
-    } while (ifError);
+    } while (!ifExit);
 }
 
-void changePwd(void)
+void changePwd(User read, FILE * fp)
 {
-    
+    char currentPassword[MAX_PASSWORD];
+    char newPassword[MAX_PASSWORD];
+    char confirmPassword[MAX_PASSWORD];
+    int tryCount = 1;
+
+    // Prompt the user to enter the current password
+    printf("%s\n", local("enter_current_password"));
+    printf(">>> ");
+    getPassword(currentPassword);
+
+    tryCount = 1;
+    do
+    {
+        if (!strcmp(currentPassword, localAccount.password))
+        {
+            break;
+        }
+        else
+        {
+            printf(_RED("%s\n"), local("pwd_incorrect"));
+            if (tryCount >= MAX_TRY_COUNT)
+            {
+                printf(_RED("%s (%d)\n"),
+                        local("over_tries"), MAX_TRY_COUNT);
+                return; 
+            }
+            printf("%s\n", local("re_input_pwd"));
+            printf(">>> ");
+            getPassword(currentPassword);
+            tryCount++;
+        }
+    } while (1);
+
+    // Prompt the user to enter a new password
+    printf("%s\n", local("enter_new_password"));
+    printf(">>> ");
+    getPassword(newPassword);
+
+    tryCount = 1;
+    do
+	{
+        // Confirm the new password
+        printf("%s\n", local("confirm_pwd"));
+        printf(">>> ");
+        getPassword(confirmPassword);
+		if (!strcmp(newPassword, confirmPassword))
+		{
+            break; // Passwords match
+		}
+		else
+		{
+            printf(_RED("%s\n"), local("different_pwd"));
+            if (tryCount >= MAX_TRY_COUNT)
+            {
+                printf(_RED("%s (%d)\n"),
+                        local("over_tries"), MAX_TRY_COUNT);
+                return; 
+            }
+			printf("%s\n", local("re_input_pwd"));
+            printf(">>> ");
+            getPassword(newPassword);
+            tryCount++;
+		}
+    } while (1);
+
+    // Update the password in the read structure
+    strcpy(read.password, newPassword);
+
+    // Move the file pointer to the position of this user
+    long position = (localAccount.serialNum) * sizeof(User);
+
+    // Move the file pointer to the specific user's position in the file
+    fseek(fp, position, SEEK_SET);
+
+    // Save the updated user data back to the file
+    if (fwrite(&read, sizeof(User), 1, fp) != 1) 
+    {
+        printf(_RED("%s\n"), local("save_failed"));
+    } 
+    else 
+    {
+        printf(_GREEN("%s\n"), local("save_succeeded"));
+    }
+
+    printf("\n");
 }
 
-void basicInfo(Student info)
+void basicInfo(User info)
 {
-    printf("%s%s %s:", local("student"), info.name, local("basic_information"));
+    printf(_BLUE("%s%s %s:\n"), local("student"),
+           info.name, local("basic_information"));
     printf("\t%s: %ld\n", local("serial_number"), info.serialNum);
     printf("\t%s: %s\n", local("student_ID"), info.id);
-    
+    printf("\t%s: %s\n", local("gender"), local(info.gender));
+    printf("\t%s: %d\n", local("session"), info.session);
+    printf("\t%s: %s\n", local("if_graduated"), info.ifGraduated ?
+                                                local("yes") : local("no"));
+    printf("\n");
 }
 
-void queryScores(void)
+void queryScores(void) 
 {
+    int counter = 0;
 
+    printf(_BLUE("%s\n"), local("your_scores")); // Display the title
+
+    for (int i = 0; i < MAX_TERM; i++) 
+    {
+        for (int j = 0; j < MAX_LESSON; j++) 
+        {
+            // Check if the course has ended
+            if (localAccount.curriculums[i][j].ifEnded)
+            {
+                printf("\t%s: %.2f\n",
+                       localAccount.curriculums[i][j].courseCode,
+                       localAccount.curriculums[i][j].performScore);
+                counter++;
+            }
+        }
+    }
+
+    if (counter == 0)
+    {
+        printf(_RED("%s\n"), local("no_ended_course"));
+    }
+
+    printf("\n");
 }
 
-void queryCurriculum(void)
+void queryCurriculum(void) 
 {
+    int counter = 0;
 
-}
+    printf(_BLUE("%s\n"), local("your_curriculum")); // Display the title
 
-void manageEmail(void)
-{
+    for (int i = 0; i < MAX_TERM; i++) 
+    {
+        if (strcmp(localAccount.curriculums[i][0].courseCode, ""))
+        {
+            printf("%s %d:\n", local("term"), i + 1);
+        }
+        for (int j = 0; j < MAX_LESSON; j++) 
+        {
+            if (strcmp(localAccount.curriculums[i][j].courseCode, ""))
+            {
+                printf("  %s - %s\n",
+                    localAccount.curriculums[i][j].courseCode,
+                    localAccount.curriculums[i][j].ifEnded ? 
+                    local("ended") : local("ongoing"));
+                counter++;
+            }
+        }
+    }
 
-}
+    if (counter == 0)
+    {
+        printf(_RED("%s\n"), local("no_course"));
+    }
 
-void expressInfo(void)
-{
-
+    printf("\n");
 }

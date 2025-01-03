@@ -1,10 +1,10 @@
 /*
 * File: login.h
 * Author: TouHikari
-* Date: 2024-12-19
+* Date: 2025-01-03
 * Description: Include headfiles, macro definitions, and function prototypes 
 *              for login.c. Include structure definitions of user.
-* Version: 0.0.2
+* Version: 1.0.0
 */
 
 #ifndef _LOGIN_H_
@@ -21,8 +21,9 @@
 #define MAX_STUDENT_ID 20
 #define MAX_TERM 10
 #define MAX_LESSON 20
-
 #define MAX_TRY_COUNT 5     // Maximum of tries
+#define MIN_SESSION 1980    // Minimum of year of attendance
+#define MAX_SESSION 2025    // Maximum of year of attendance
 
 struct Curriculum
 {
@@ -34,7 +35,7 @@ struct Curriculum
     double finalScore;
 };
 
-typedef struct         // Structure of user data
+typedef struct // Structure of user data
 {
     long serialNum;
     char name[MAX_NAME];
@@ -44,11 +45,14 @@ typedef struct         // Structure of user data
     int session;
     bool ifGraduated;
     struct Curriculum curriculums[MAX_TERM][MAX_LESSON];
-} Student;
+} User;
 
-void login(void);           // Login module
-void regis(void);           // Register module
-void nameFile(char [], Student * in);     // Determine file name
-void getPassword(char []);  // Get password in non echo mode
+// Function prototypes
+void Login(void); // Login module
+void Regis(void); // Register module
+// Open file function
+void openFile(FILE ** fp, char fileName[], char openWay[]);
+void closeFile(FILE ** fp, char fileName[]); // Close file function
+void getPassword(char []); // Get password in non echo mode
 
 #endif

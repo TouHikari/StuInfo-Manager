@@ -4,7 +4,7 @@
 * Date: 2024-12-17
 * Description: Include headfiles, macro definitions and function prototypes
 *              for output.c
-* Version: 0.0.2
+* Version: 1.0.0
 */
 
 #ifndef _OUTPUT_H_
