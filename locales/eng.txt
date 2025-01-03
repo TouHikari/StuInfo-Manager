@@ -61,3 +61,4 @@ session = Year of attendance
 if_graduated = If have graduated
 save_succeeded = Save successful! 
 save_failed = Save failed! 
+sorry_bye = Sorry! I haven't finished this part~! 

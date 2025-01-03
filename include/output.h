@@ -10,6 +10,8 @@
 #ifndef _OUTPUT_H_
 #define _OUTPUT_H_
 
+#include "../include/localization.h"
+
 // Color strings
 #define _BLACK(string) "\033[;30m" string "\033[0m"
 #define _RED(string) "\033[;31m" string "\033[0m"

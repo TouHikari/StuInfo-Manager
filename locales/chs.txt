@@ -61,3 +61,4 @@ session = 入学/入职年份
 if_graduated = 是否毕业
 save_succeeded = 保存成功！
 save_failed = 保存失败！
+sorry_bye = 对不起啦，我还没做完这一部分~！

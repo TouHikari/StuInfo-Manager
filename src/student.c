@@ -3,7 +3,7 @@
 * Author: TouHikari
 * Date: 2025-01-03
 * Description: Student client program
-* Version: 0.0.2
+* Version: 1.0.0
 */
 
 #include "../include/student.h"
