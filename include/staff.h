@@ -8,7 +8,5 @@
 
 // Function prototypes
 void staffCore(void);
-void staffLogin(void);
-void staffRegis(void);
 
 #endif

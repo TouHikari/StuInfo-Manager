@@ -8,7 +8,5 @@
 
 // Function prototypes
 void guestCore(void);
-void guestLogin(void);
-void guestRegis(void);
 
 #endif

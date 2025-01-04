@@ -7,13 +7,3 @@ void guestCore(void)
 {
     printf(_RED("%s\n"), local("sorry_bye"));
 }
-
-void guestLogin(void)
-{
-
-}
-
-void guestRegis(void)
-{
-
-}

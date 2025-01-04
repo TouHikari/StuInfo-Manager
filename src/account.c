@@ -44,30 +44,36 @@ void accountCore(void)
         openFile(&user_fp, filename, "r");
 
         menu(); // Display the menu for the user
-    }
 
-    if (fclose(user_fp) != 0) // Close the file and check for errors
-    {
-        fprintf(stderr, _RED("%s: %s\n"), filename, local("close_failed"));
-        exit(EXIT_FAILURE);
-    }
+        if (fclose(user_fp) != 0) // Close the file and check for errors
+        {
+            fprintf(stderr, _RED("%s: %s\n"), filename, local("close_failed"));
+            exit(EXIT_FAILURE);
+        }
 
-    // Enter the corresponding function of the identity group
-    if (!strcmp(identity, "admin"))
-    {
-        adminCore();
-    }
-    else if (!strcmp(identity, "staff"))
-    {
-        staffCore();
-    }
-    else if (!strcmp(identity, "student"))
-    {
-        studentCore();
-    }
-    else if (!strcmp(identity, "guest"))
-    {
-        guestCore();
+        if (ifLogin)
+        {
+            // Enter the corresponding function of the identity group
+            if (!strcmp(identity, "admin"))
+            {
+                adminCore();
+            }
+            else if (!strcmp(identity, "staff"))
+            {
+                staffCore();
+            }
+            else if (!strcmp(identity, "student"))
+            {
+                studentCore();
+            }
+            else if (!strcmp(identity, "guest"))
+            {
+                guestCore();
+            }
+
+            ifLogin = false;
+            printf(_GREEN("%s\n\n"), local("back_to_menu"));
+        }
     }
 }
 

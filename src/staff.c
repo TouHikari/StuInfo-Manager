@@ -7,13 +7,3 @@ void staffCore(void)
 {
     printf(_RED("%s\n"), local("sorry_bye"));
 }
-
-void staffLogin(void)
-{
-
-}
-
-void staffRegis(void)
-{
-
-}

@@ -213,7 +213,7 @@ void Regis(void)
             continue;
     }
     
-    if (!strcmp(identity, "student"))
+    if (!strcmp(identity, "student")) // When is student registering
     {
         // Get ifGraduated
         char graduated;

@@ -10,13 +10,13 @@
 
 extern LocalizationEntry * _entries_;   // Declared in localization.c
 extern int _entryCount_;                // Declared in localization.c
-extern User localAccount;
+extern User localAccount;               // Declared in login.c
 
 // User client core program
 void studentCore(void)
 {
-    User read;       // User is defined in login.h
-    FILE *fp;           // File ptr
+    User read;  // User is defined in login.h
+    FILE *fp;   // File ptr
 
     // Read file
     openFile(&fp, "bin/student.txt", "r+");
@@ -65,10 +65,10 @@ void studentMenu(User read, FILE * fp)
         switch (action)
         {
         case '1':
-            changePwd(read, fp);
+            studentChangePwd(read, fp);
             break;
         case '2':
-            basicInfo(localAccount);
+            studentBasicInfo(localAccount);
             break;
         case '3':
             queryScores();
@@ -86,7 +86,8 @@ void studentMenu(User read, FILE * fp)
     } while (!ifExit);
 }
 
-void changePwd(User read, FILE * fp)
+// Change password
+void studentChangePwd(User read, FILE * fp)
 {
     char currentPassword[MAX_PASSWORD];
     char newPassword[MAX_PASSWORD];
@@ -175,7 +176,8 @@ void changePwd(User read, FILE * fp)
     printf("\n");
 }
 
-void basicInfo(User info)
+// Print student's basic infomation
+void studentBasicInfo(User info)
 {
     printf(_BLUE("%s%s %s:\n"), local("student"),
            info.name, local("basic_information"));
@@ -188,6 +190,7 @@ void basicInfo(User info)
     printf("\n");
 }
 
+// Print scores
 void queryScores(void) 
 {
     int counter = 0;
@@ -201,9 +204,15 @@ void queryScores(void)
             // Check if the course has ended
             if (localAccount.curriculums[i][j].ifEnded)
             {
-                printf("\t%s: %.2f\n",
-                       localAccount.curriculums[i][j].courseCode,
-                       localAccount.curriculums[i][j].performScore);
+                printf("%s: \n",
+                       localAccount.curriculums[i][j].courseCode);
+                printf("\t%s: %.2f\n\t%s: %.2f\n\t%s: %.2f\n", 
+                       local("perform_score"),
+                       localAccount.curriculums[i][j].performScore,
+                       local("midterm_score"),
+                       localAccount.curriculums[i][j].midtermScore,
+                       local("final_score"),
+                       localAccount.curriculums[i][j].finalScore);
                 counter++;
             }
         }
@@ -217,6 +226,7 @@ void queryScores(void)
     printf("\n");
 }
 
+// Print curriculum
 void queryCurriculum(void) 
 {
     int counter = 0;
@@ -233,7 +243,7 @@ void queryCurriculum(void)
         {
             if (strcmp(localAccount.curriculums[i][j].courseCode, ""))
             {
-                printf("  %s - %s\n",
+                printf("\t%s - %s\n",
                     localAccount.curriculums[i][j].courseCode,
                     localAccount.curriculums[i][j].ifEnded ? 
                     local("ended") : local("ongoing"));
