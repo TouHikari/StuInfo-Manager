@@ -65,7 +65,7 @@ void welcome_chs(void)
     printf("                信息管理系统 %s\n", VERSION);
     printf("\n");
     printf("                  作者：TouHikari\n");
-    printf("       Github主页：https://github.com/TouHikari\n");
+    printf("       GitHub主页：https://github.com/TouHikari\n");
     printf("*******************************************************\n\n");
 }
 
@@ -77,6 +77,6 @@ void welcome_eng(void)
     printf("        Information Management System %s\n", VERSION);
     printf("\n");
     printf("                 Author: TouHikari\n");
-    printf("        Github: https://github.com/TouHikari\n");
+    printf("        GitHub: https://github.com/TouHikari\n");
     printf("*******************************************************\n\n");
 }
